@@ -1,0 +1,177 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+
+:root {
+  --white: #ffffff;
+  --black: #212429;
+}
+body {
+  font-family: "Montserrat", Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 20px;
+  background-color: var(--white);
+  font-weight: 400;
+  color: var(--black);
+}
+a {
+  color: var(--black);
+}
+.container {
+  max-width: 1280px;
+  margin: auto;
+  padding: 0 32px;
+}
+.displayMenu {
+  display: none;
+}
+
+/* HEADER */
+.site-header {
+  padding: 32px 0;
+  border-bottom: 2px solid var(--black);
+  position: fixed;
+  width: 100%;
+  background-color: var(--white);
+  z-index: 1;
+}
+.site-header > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-menu-icon {
+  line-height: 0;
+}
+.header-menu-option-icons {
+  display: none;
+}
+.header-menu-nav {
+  padding: 8px 0;
+}
+.main-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px 0;
+  text-align: center;
+}
+.main-menu a {
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.main-menu :is(li:hover, li.active) a {
+  font-weight: 700;
+}
+.header-menu-option-icons {
+  justify-content: space-between;
+  align-items: center;
+  gap: 0 32px;
+}
+
+/* MAIN CONTENT */
+.main-content {
+  padding: 140px 0 40px;
+}
+.title {
+  font-size: 32px;
+  line-height: 34px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.colection-list {
+  padding: 32px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 24px 56px;
+}
+.colection-list img {
+  border-radius: 10px;
+  width: 100%;
+}
+.colection-list article:hover img {
+  animation: flip 0.7s 1;
+}
+.colection-info {
+  padding: 16px;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0 8px;
+}
+.price {
+  font-weight: 700;
+}
+
+/* FOOTER */
+footer {
+  background-color: var(--black);
+}
+.footer-info-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.footer-info-list > li {
+  padding: 24px 0;
+}
+.footer-info-list > li:not(:last-child) {
+  border-bottom: 2px solid var(--white);
+}
+.footer-info-list :is(a, li) {
+  color: var(--white);
+  text-decoration: none;
+}
+.footer-info-list a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.footer-info-list .img-background {
+  background-color: var(--white);
+  border-radius: 100%;
+  height: 55px;
+  width: 55px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes flip {
+  from {
+    transform: rotateY(180deg);
+  }
+  to {
+    transform: rotateY(0deg);
+  }
+}
+
+@media (min-width: 992px) {
+  .displayMenu {
+    display: flex;
+  }
+  .header-menu-option-icons {
+    display: flex;
+  }
+  .site-header > div {
+    flex-direction: row;
+  }
+  .main-menu {
+    flex-direction: row;
+    gap: 0 32px;
+  }
+  .header-menu-nav {
+    padding: 0;
+  }
+  .footer-info-list {
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+  }
+  .footer-info-list > li:not(:last-child) {
+    border-bottom: none;
+  }
+}
