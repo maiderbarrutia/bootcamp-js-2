@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Laboratorio Módulo 4 - Funciones</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Laboratorio Módulo 4 - Funciones</h1>
+
+      <div class="turno-display">
+        <h2 class="numero-turno" id="shiftNumber">01</h2>
+        <p class="texto-turno">Por favor, acérquese al mostrador</p>
+      </div>
+      <div class="buttons">
+        <button id="previous">Anterior</button>
+        <button id="reset">Reset</button>
+        <button id="next">Siguiente</button>
+      </div>
+      <div class="shift-value">
+        <p>Cambiar el turno por el número deseado:</p>
+        <input id="shiftInputValue" type="number" />
+        <button id="valueChangeButton">Cambiar turno</button>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
