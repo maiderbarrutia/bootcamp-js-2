@@ -1,63 +1,53 @@
 import "./style.css";
 
-//VARIABLES
-const giveCard = document.getElementById("giveCard") as HTMLButtonElement;
+//VARIABLES GENERALES
+const giveCardButton = document.getElementById(
+  "giveCardButton"
+) as HTMLButtonElement;
+const cardImg = document.getElementById("cardImg") as HTMLImageElement;
+const messagesContent = document.getElementById(
+  "messagesContent"
+) as HTMLParagraphElement;
 const restartGameButton = document.getElementById(
   "restartButton"
 ) as HTMLDivElement;
-const cardImg = document.getElementById("cardImg") as HTMLImageElement;
-const messages = document.getElementById("messages") as HTMLDivElement;
 const standUpButton = document.getElementById(
   "standUpButton"
+) as HTMLButtonElement;
+const cardImgContainer = document.querySelector(
+  ".cardAndMessage"
+) as HTMLDivElement;
+const whatHappensButton = document.getElementById(
+  "whatHappensButton"
 ) as HTMLButtonElement;
 
 let score: number = 0;
 
 //MOSTRAR PUNTUACIÓN
-function muestraPuntuacion(): void {
+function showScore(): void {
   const showScore = document.getElementById("showScore");
   if (showScore !== null && showScore !== undefined) {
     showScore.innerHTML = score.toString();
   }
 }
 document.addEventListener("DOMContentLoaded", () => {
-  muestraPuntuacion();
+  showScore();
 });
 
 //PEDIR CARTA: Generar carta aleatoria
-
-function dameCarta(): void {
+function giveCard(): void {
   const chosenCard = Math.ceil(Math.random() * 12);
-
   if (chosenCard <= 7 || chosenCard >= 10) {
-    if (score <= 7.5) {
-      mostrarCarta(chosenCard);
-      let points;
-      if (chosenCard === 10 || chosenCard === 11 || chosenCard === 12) {
-        points = 0.5;
-      } else {
-        points = chosenCard;
-      }
-      score = score + points;
-
-      muestraPuntuacion();
-    } else {
-      console.log("game over");
-      giveCard.style.display = "none";
-      messages.innerHTML = "GameOver";
-      cardImg.style.display = "none";
-      restartGameButton.style.display = "flex";
-      standUpButton.style.display = "none";
-    }
+    showCard(chosenCard);
+    cardScore(chosenCard);
   }
 }
-
-if (giveCard !== null && giveCard !== undefined) {
-  giveCard.addEventListener("click", dameCarta);
+if (giveCardButton !== null && giveCardButton !== undefined) {
+  giveCardButton.addEventListener("click", giveCard);
 }
 
 // MOSTRAR CARTA
-const mostrarCarta = (carta: number): void => {
+const showCard = (carta: number): void => {
   switch (carta) {
     case 1:
       cardImg.src =
@@ -114,37 +104,85 @@ const mostrarCarta = (carta: number): void => {
   }
 };
 
-//REINICIAR EL JUEGO
-function restartGame() {
-  cardImg.style.display = "flex";
+//SUMAR PUNTUACIÓN Y MOSTRARLA
+const cardScore = (chosenCard: number): void => {
+  let points;
+  if (chosenCard === 10 || chosenCard === 11 || chosenCard === 12) {
+    points = 0.5;
+  } else {
+    points = chosenCard;
+  }
+  score = score + points;
+  showScore();
+
+  if (score > 7.5) {
+    gameOver();
+  }
+};
+
+//TERMINAR PARTIDA CUANDO SUPERAS 7.5 PUNTOS
+const gameOver = (): void => {
+  giveCardButton.style.display = "none";
+  cardImgContainer.classList.add("blocked");
+  messagesContent.innerHTML = "GameOver";
+  messagesContent.style.backgroundColor = "red";
+  // cardImg.style.display = "none";
   cardImg.src =
     "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg";
-  giveCard.style.display = "flex";
-  messages.innerHTML = "";
+  restartGameButton.style.display = "flex";
+  standUpButton.style.display = "none";
+};
+
+//PLANTARSE
+function stopGame() {
+  giveCardButton.style.display = "none";
+  standUpButton.style.display = "none";
+  restartGameButton.style.display = "flex";
+  messagesContent.style.backgroundColor = "green";
+  whatHappensButton.style.display = "flex";
+  cardImgContainer.classList.add("blocked");
+  if (score <= 4) {
+    messagesContent.innerHTML = "Has sido muy conservador";
+  } else if (score > 4 && score < 6) {
+    messagesContent.innerHTML = "Te ha entrado el canguelo eh?";
+  } else if (score >= 6 && score <= 7) {
+    messagesContent.innerHTML = "Casi casi...";
+  } else if (score === 7.5) {
+    messagesContent.innerHTML = "¡ Lo has clavado! ¡Enhorabuena!";
+  }
+}
+if (standUpButton !== null && standUpButton !== undefined) {
+  standUpButton.addEventListener("click", stopGame);
+}
+
+// REINICIAR JUEGO
+function restartGame() {
+  score = 0;
+  showScore();
+  cardImgContainer.classList.remove("blocked");
+  messagesContent.style.backgroundColor = "";
+  cardImg.style.display = "flex";
+  whatHappensButton.style.display = "none";
+  cardImg.src =
+    "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg";
+  giveCardButton.style.display = "flex";
+  messagesContent.innerHTML = "";
   restartGameButton.style.display = "none";
   standUpButton.style.display = "flex";
-  score = 0;
-  muestraPuntuacion();
 }
 if (restartGameButton !== null && restartGameButton !== undefined) {
   restartGameButton.addEventListener("click", restartGame);
 }
 
-//PLANTARSE
-function stopGame() {
-  giveCard.style.display = "none";
-  standUpButton.style.display = "none";
-  restartGameButton.style.display = "flex";
-  if (score <= 4) {
-    messages.innerHTML = "Has sido muy conservador";
-  } else if (score === 5) {
-    messages.innerHTML = "Te ha entrado el canguelo eh?";
-  } else if (score === 6 || (score = 7)) {
-    messages.innerHTML = "Casi casi...";
-  } else if (score === 7.5) {
-    messages.innerHTML = "¡ Lo has clavado! ¡Enhorabuena!";
-  }
+// SABER LO QUE HABRÍA PASADO
+function guessWhatHappens() {
+  cardImgContainer.classList.remove("blocked");
+  messagesContent.style.backgroundColor = "";
+  whatHappensButton.style.display = "none";
+  messagesContent.innerHTML = "";
+  giveCardButton.style.display = "flex";
 }
-if (standUpButton !== null && standUpButton !== undefined) {
-  standUpButton.addEventListener("click", stopGame);
+
+if (whatHappensButton !== null && whatHappensButton !== undefined) {
+  whatHappensButton.addEventListener("click", guessWhatHappens);
 }

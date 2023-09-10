@@ -8,19 +8,31 @@
   </head>
   <body>
     <div id="app">
-      <div id="showScore">0</div>
+      <h1>Juego de las siete y media</h1>
+      <div>
+        <div class="score-panel">
+          <p>
+            Puntuación total:
+            <span id="showScore">0</span>
+          </p>
+        </div>
 
-      <img
-        id="cardImg"
-        src="https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg"
-        alt=""
-      />
+        <div class="cardAndMessage">
+          <p id="messagesContent"></p>
 
-      <div id="messages"></div>
-
-      <button id="giveCard">Dame carta</button>
-      <button id="standUpButton">Plantarse</button>
-      <button id="restartButton">Reiniciar juego</button>
+          <img
+            id="cardImg"
+            src="https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg"
+            alt="Carta no visible"
+          />
+        </div>
+        <div class="buttons">
+          <button id="giveCardButton">Dame carta</button>
+          <button id="standUpButton">Plantarse</button>
+          <button id="whatHappensButton">¿Que habria pasado?</button>
+          <button id="restartButton">Reiniciar juego</button>
+        </div>
+      </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
