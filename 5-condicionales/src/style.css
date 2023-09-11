@@ -155,7 +155,6 @@ button:focus-visible {
 #standUpButton {
   background-color: purple;
 }
-#restartButton,
-#whatHappensButton {
+:disabled {
   display: none;
 }
