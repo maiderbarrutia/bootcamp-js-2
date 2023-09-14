@@ -1,17 +1,15 @@
 import "./style.css";
-
 //VARIABLES GENERALES
-const giveCardButton = document.getElementById("giveCardButton");
-const restartGameButton = document.getElementById("restartButton");
-const whatHappensButton = document.getElementById("whatHappensButton");
-const standUpButton = document.getElementById("standUpButton");
-
 let score: number = 0;
 
 //MOSTRAR PUNTUACIÓN
 function showScore(): void {
   const showScore = document.getElementById("showScore");
-  if (showScore !== null && showScore !== undefined) {
+  if (
+    showScore !== null &&
+    showScore !== undefined &&
+    showScore instanceof HTMLSpanElement
+  ) {
     showScore.textContent = score.toString();
   }
 }
@@ -20,8 +18,8 @@ function showScore(): void {
 const generateRandomNumber = (): number => Math.ceil(Math.random() * 10);
 
 //GENERAR NÚMERO DE CARTA
-const generateCardNumber = (cardNumber: number): number =>
-  cardNumber <= 7 ? cardNumber : cardNumber + 2;
+const generateCardNumber = (randomNumber: number): number =>
+  randomNumber <= 7 ? randomNumber : randomNumber + 2;
 
 //ASIGNAR URL CON LA IMAGEN DE CADA CARTA A CADA NÚMERO
 const getCardUrl = (card: number): string => {
@@ -85,25 +83,22 @@ const getCardUrl = (card: number): string => {
   return cardUrl;
 };
 
-// PUNTOS DE CADA CARTA
-const cardPoints = (cardNumber: number): void => {
-  let points;
-  cardNumber === 10 || cardNumber === 11 || cardNumber === 12
-    ? (points = 0.5)
-    : (points = cardNumber);
-  totalPoints(points);
+// CALCULAR PUNTOS DE CADA CARTA
+const assignCardPoints = (cardNumber: number): number => {
+  let points: number;
+  cardNumber >= 10 ? (points = 0.5) : (points = cardNumber);
+  return points;
 };
 
 //PUNTUACIÓN TOTAL
-function totalPoints(points: number) {
+function calculateTotalPoints(points: number): number {
   score = score + points;
-  showScore();
-  winOrLose(score);
+  return score;
 }
 
 //PINTAR LA CARTA MEDIANTE URL SEGUN NUMERO DE CARTA
-function assignCardUrl(card: number): void {
-  const urlCarta = getCardUrl(card);
+function assignCardUrl(cardNumber: number): void {
+  const urlCarta: string = getCardUrl(cardNumber);
   const imgCard = document.getElementById("cardImg");
 
   if (
@@ -117,25 +112,28 @@ function assignCardUrl(card: number): void {
 
 // DAR CARTA
 function giveCard(): void {
-  const randomNumber = generateRandomNumber();
-  const cardNumber = generateCardNumber(randomNumber);
+  const randomNumber: number = generateRandomNumber();
+  const cardNumber: number = generateCardNumber(randomNumber);
+  const cardPoints: number = assignCardPoints(cardNumber);
+  const totalPoints: number = calculateTotalPoints(cardPoints);
 
+  showScore();
   assignCardUrl(cardNumber);
-  cardPoints(cardNumber);
+  checkGame(totalPoints);
 }
 
 // HAS GANADO O PERDIDO?
-function winOrLose(totalScore: number) {
+function checkGame(totalScore: number): void {
   if (totalScore > 7.5) {
     gameOver();
   }
   if (totalScore === 7.5) {
-    win();
+    winGame();
   }
 }
 
-//MENSAJES
-function messages(messageText: string, color: string): void {
+//MOSTRAR MENSAJES
+function showMessages(messageText: string, color: string): void {
   const messagesContent = document.getElementById("messagesContent");
   if (
     messagesContent !== null &&
@@ -147,79 +145,101 @@ function messages(messageText: string, color: string): void {
   }
 }
 
+// MENSAJES AL PLANTARSE
+function stopGameMessages(): void {
+  if (score <= 4) {
+    showMessages("Has sido muy conservador", "green");
+  } else if (score > 4 && score < 6) {
+    showMessages("Te ha entrado el canguelo eh?", "green");
+  } else if (score >= 6 && score <= 7) {
+    showMessages("Casi casi...", "green");
+  } else if (score === 7.5) {
+    showMessages("¡Lo has clavado! ¡Enhorabuena!", "green");
+  }
+}
+
 //HABILITAR BOTONES
-const enableOrDisableButton = (id: string, enabled: boolean): void => {
+const disabledButton = (id: string, enabled: boolean): void => {
   const button = document.getElementById(id);
   button !== null && button !== undefined && button instanceof HTMLButtonElement
     ? (button.disabled = enabled)
-    : console.error(`No existe el <button> con id: ${id}`);
+    : console.error(`No existe el botón con id: ${id}`);
 };
 
-//INICIAR JUEGO
-function restartGame() {
-  score = 0;
-  showScore();
-  enableOrDisableButton("giveCardButton", false);
-  enableOrDisableButton("standUpButton", false);
-  enableOrDisableButton("restartButton", true);
-  enableOrDisableButton("whatHappensButton", true);
-  assignCardUrl(0);
-  messages("", "");
+//DESHABILITAR BOTONES INICIAR JUEGO
+function restartGamedisabledOrEnabledButtons(): void {
+  disabledButton("giveCardButton", false);
+  disabledButton("standUpButton", false);
+  disabledButton("restartButton", true);
+  disabledButton("whatHappensButton", true);
+}
+//DESHABILITAR BOTONES JUEGO TERMINADO
+function gameOverdisabledOrEnabledButtons(): void {
+  disabledButton("giveCardButton", true);
+  disabledButton("standUpButton", true);
+  disabledButton("restartButton", false);
+  disabledButton("whatHappensButton", true);
 }
 
-// JUEGO TERMINADO
+//DESHABILITAR BOTONES PLANTARSE
+function stopGamedisabledOrEnabledButtons(): void {
+  disabledButton("giveCardButton", true);
+  disabledButton("standUpButton", true);
+  disabledButton("restartButton", false);
+  disabledButton("whatHappensButton", false);
+}
+
+//DESHABILITAR BOTONES UANDO GANAS LA PARTIDA
+function winGamedisabledOrEnabledButtons(): void {
+  disabledButton("giveCardButton", true);
+  disabledButton("standUpButton", true);
+  disabledButton("restartButton", false);
+  disabledButton("whatHappensButton", true);
+}
+//
+function guessWhatHappensdisabledOrEnabledButtons(): void {
+  disabledButton("giveCardButton", false);
+  disabledButton("standUpButton", false);
+  disabledButton("restartButton", true);
+  disabledButton("whatHappensButton", true);
+}
+
+//REINICIAR JUEGO
+function restartGame(): void {
+  score = 0;
+  showScore();
+  restartGamedisabledOrEnabledButtons();
+  assignCardUrl(0);
+  showMessages("", "");
+}
+
+// TERMINAR EL JUEGO
 const gameOver = (): void => {
-  messages("game over", "red");
-  enableOrDisableButton("giveCardButton", true);
-  enableOrDisableButton("standUpButton", true);
-  enableOrDisableButton("restartButton", false);
-  enableOrDisableButton("whatHappensButton", true);
+  gameOverdisabledOrEnabledButtons();
+  showMessages("game over", "red");
   assignCardUrl(0);
 };
 
 //PLANTARSE
-function stopGame() {
-  enableOrDisableButton("giveCardButton", true);
-  enableOrDisableButton("standUpButton", true);
-  enableOrDisableButton("restartButton", false);
-  enableOrDisableButton("whatHappensButton", false);
+function stopGame(): void {
+  stopGamedisabledOrEnabledButtons();
   stopGameMessages();
 }
 
 //HAS GANADO LA PARTIDA CON 7.5 PUNTOS
-function win() {
-  enableOrDisableButton("giveCardButton", true);
-  enableOrDisableButton("standUpButton", true);
-  enableOrDisableButton("restartButton", false);
-  enableOrDisableButton("whatHappensButton", true);
+function winGame(): void {
+  winGamedisabledOrEnabledButtons();
   stopGameMessages();
 }
 
-// MENSAJES AL PLANTARSE
-function stopGameMessages() {
-  if (score <= 4) {
-    messages("Has sido muy conservador", "green");
-  } else if (score > 4 && score < 6) {
-    messages("Te ha entrado el canguelo eh?", "green");
-  } else if (score >= 6 && score <= 7) {
-    messages("Casi casi...", "green");
-  } else if (score === 7.5) {
-    messages("¡Lo has clavado! ¡Enhorabuena!", "green");
-  }
-}
-
 // SABER LO QUE HABRÍA PASADO
-function guessWhatHappens() {
-  enableOrDisableButton("giveCardButton", false);
-  enableOrDisableButton("standUpButton", false);
-  enableOrDisableButton("restartButton", true);
-  enableOrDisableButton("whatHappensButton", true);
-
-  messages("", "");
+function guessWhatHappens(): void {
+  guessWhatHappensdisabledOrEnabledButtons();
+  showMessages("", "");
 }
 
-//BOTONES
-function buttons(button: HTMLElement | null, handler: () => void) {
+//AGRUPAR BOTONES
+function buttons(button: HTMLElement | null, handler: () => void): void {
   if (
     button instanceof HTMLButtonElement &&
     button !== undefined &&
@@ -230,7 +250,13 @@ function buttons(button: HTMLElement | null, handler: () => void) {
 }
 
 //INICIAR JUEGO
-function loadGame() {
+function loadGame(): void {
+  //VARIABLES BOTONES
+  const giveCardButton = document.getElementById("giveCardButton");
+  const restartGameButton = document.getElementById("restartButton");
+  const whatHappensButton = document.getElementById("whatHappensButton");
+  const standUpButton = document.getElementById("standUpButton");
+
   buttons(giveCardButton, giveCard);
   buttons(restartGameButton, restartGame);
   buttons(whatHappensButton, guessWhatHappens);
@@ -238,6 +264,4 @@ function loadGame() {
 }
 
 /* -------------------- CARGAR PARTIDA -------------*/
-document.addEventListener("DOMContentLoaded", () => {
-  loadGame();
-});
+document.addEventListener("DOMContentLoaded", loadGame);
