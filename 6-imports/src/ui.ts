@@ -4,7 +4,6 @@ import {
   generateCardNumber,
   assignCardPoints,
   calculateTotalPoints,
-  getCardUrl,
 } from "./motor";
 
 //MOSTRAR PUNTUACIÓN
@@ -18,6 +17,68 @@ function showScore(): void {
     showScore.textContent = game.score.toString();
   }
 }
+
+//ASIGNAR URL CON LA IMAGEN DE CADA CARTA A CADA NÚMERO
+const getCardUrl = (card: number): string => {
+  let cardUrl: string = "";
+  switch (card) {
+    case 1:
+      cardUrl =
+        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/1_as-copas.jpg";
+      break;
+
+    case 2:
+      cardUrl =
+        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/2_dos-copas.jpg";
+      break;
+
+    case 3:
+      cardUrl =
+        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/3_tres-copas.jpg";
+      break;
+
+    case 4:
+      cardUrl =
+        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/4_cuatro-copas.jpg";
+      break;
+
+    case 5:
+      cardUrl =
+        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/5_cinco-copas.jpg";
+      break;
+
+    case 6:
+      cardUrl =
+        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/6_seis-copas.jpg";
+      break;
+
+    case 7:
+      cardUrl =
+        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/7_siete-copas.jpg";
+      break;
+
+    case 10:
+      cardUrl =
+        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/10_sota-copas.jpg";
+      break;
+
+    case 11:
+      cardUrl =
+        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/11_caballo-copas.jpg";
+      break;
+
+    case 12:
+      cardUrl =
+        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/12_rey-copas.jpg";
+      break;
+
+    default:
+      cardUrl =
+        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg";
+      break;
+  }
+  return cardUrl;
+};
 
 //PINTAR LA CARTA MEDIANTE URL SEGUN NUMERO DE CARTA
 function assignCardUrl(cardNumber: number): void {
@@ -52,6 +113,15 @@ function checkGame(totalScore: number): void {
   }
   if (totalScore === 7.5) {
     winGame();
+  }
+}
+// HABRIAS GANADO O PERDIDO?
+function checkGuessWhatHappens(totalScore: number): void {
+  if (totalScore > 7.5) {
+    gameOver();
+  }
+  if (totalScore <= 7.5) {
+    winAtWhatHappens();
   }
 }
 
@@ -108,9 +178,9 @@ function winGamedisabledOrEnabledButtons(): void {
 }
 //
 function guessWhatHappensdisabledOrEnabledButtons(): void {
-  disabledButton("giveCardButton", false);
-  disabledButton("standUpButton", false);
-  disabledButton("restartButton", true);
+  disabledButton("giveCardButton", true);
+  disabledButton("standUpButton", true);
+  disabledButton("restartButton", false);
   disabledButton("whatHappensButton", true);
 }
 
@@ -142,6 +212,12 @@ export function winGame(): void {
   stopGameMessages();
 }
 
+//HAS GANADO O NO AL DAR AL BOTÓN WHATHAPPENS
+function winAtWhatHappens() {
+  guessWhatHappensdisabledOrEnabledButtons();
+  guessWhatHappensMessages();
+}
+
 // MENSAJES AL PLANTARSE
 function stopGameMessages(): void {
   if (game.score <= 4) {
@@ -155,8 +231,27 @@ function stopGameMessages(): void {
   }
 }
 
+// MENSAJES EN ¿QUE HABRÍA PASADO?
+function guessWhatHappensMessages(): void {
+  if (game.score < 7.5) {
+    showMessages("No habrías ganado pero hubieras sumado puntos", "green");
+  } else if (game.score === 7.5) {
+    showMessages("Habrías ganado", "green");
+  } else if (game.score > 7.5) {
+    showMessages("Habrías perdido", "red");
+  }
+}
+
 // SABER LO QUE HABRÍA PASADO
 export function guessWhatHappens(): void {
   guessWhatHappensdisabledOrEnabledButtons();
-  showMessages("", "");
+  guessWhatHappensMessages();
+  const randomNumber: number = generateRandomNumber();
+  const cardNumber: number = generateCardNumber(randomNumber);
+  const cardPoints: number = assignCardPoints(cardNumber);
+  const totalPoints: number = calculateTotalPoints(cardPoints);
+
+  showScore();
+  assignCardUrl(cardNumber);
+  checkGuessWhatHappens(totalPoints);
 }
