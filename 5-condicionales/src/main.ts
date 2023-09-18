@@ -1,4 +1,3 @@
-import "./style.css";
 //VARIABLES GENERALES
 let score: number = 0;
 
@@ -132,6 +131,16 @@ function checkGame(totalScore: number): void {
   }
 }
 
+// HABRIAS GANADO O PERDIDO?
+function checkGuessWhatHappens(totalScore: number): void {
+  if (totalScore > 7.5) {
+    gameOver();
+  }
+  if (totalScore <= 7.5) {
+    winAtWhatHappens();
+  }
+}
+
 //MOSTRAR MENSAJES
 function showMessages(messageText: string, color: string): void {
   const messagesContent = document.getElementById("messagesContent");
@@ -155,6 +164,16 @@ function stopGameMessages(): void {
     showMessages("Casi casi...", "green");
   } else if (score === 7.5) {
     showMessages("¡Lo has clavado! ¡Enhorabuena!", "green");
+  }
+}
+// MENSAJES EN ¿QUE HABRÍA PASADO?
+function guessWhatHappensMessages(): void {
+  if (score < 7.5) {
+    showMessages("No habrías ganado pero hubieras sumado puntos", "green");
+  } else if (score === 7.5) {
+    showMessages("Habrías ganado", "green");
+  } else if (score > 7.5) {
+    showMessages("Habrías perdido", "red");
   }
 }
 
@@ -198,9 +217,9 @@ function winGamedisabledOrEnabledButtons(): void {
 }
 //
 function guessWhatHappensdisabledOrEnabledButtons(): void {
-  disabledButton("giveCardButton", false);
-  disabledButton("standUpButton", false);
-  disabledButton("restartButton", true);
+  disabledButton("giveCardButton", true);
+  disabledButton("standUpButton", true);
+  disabledButton("restartButton", false);
   disabledButton("whatHappensButton", true);
 }
 
@@ -231,11 +250,26 @@ function winGame(): void {
   winGamedisabledOrEnabledButtons();
   stopGameMessages();
 }
+//HAS GANADO O NO AL DAR AL BOTÓN WHATHAPPENS
+function winAtWhatHappens() {
+  guessWhatHappensdisabledOrEnabledButtons();
+  guessWhatHappensMessages();
+}
 
 // SABER LO QUE HABRÍA PASADO
 function guessWhatHappens(): void {
   guessWhatHappensdisabledOrEnabledButtons();
-  showMessages("", "");
+  guessWhatHappensMessages();
+  const randomNumber: number = generateRandomNumber();
+  const cardNumber: number = generateCardNumber(randomNumber);
+  const cardPoints: number = assignCardPoints(cardNumber);
+  const totalPoints: number = calculateTotalPoints(cardPoints);
+
+  showScore();
+  assignCardUrl(cardNumber);
+
+  // calculateTotalPoints(totalPoints);
+  checkGuessWhatHappens(totalPoints);
 }
 
 //AGRUPAR BOTONES
