@@ -267,8 +267,6 @@ function guessWhatHappens(): void {
 
   showScore();
   assignCardUrl(cardNumber);
-
-  // calculateTotalPoints(totalPoints);
   checkGuessWhatHappens(totalPoints);
 }
 
