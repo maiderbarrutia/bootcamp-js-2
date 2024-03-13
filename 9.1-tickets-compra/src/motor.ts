@@ -16,7 +16,8 @@ export const calcularPrecioTotal = (
   const precioProducto = parseFloat(precio.toFixed(2));
   return precioProducto * linea.cantidad;
 };
-const calculaPrecioSinIva = (
+
+export const calculaPrecioSinIva = (
   precioInicial: number,
   porcentajeIva: number
 ): number => {
@@ -28,7 +29,7 @@ const calculaPrecioSinIva = (
 };
 
 //Por cada producto queremos el nombre, la cantidad, el precio sin IVA, el tipo de IVA y el precio con IVA.
-const calcularTicketLinea = (
+export const calcularTicketLinea = (
   lineasTicket: LineaTicket[]
 ): ResultadoLineaTicket[] => {
   const listaLineas: ResultadoLineaTicket[] = [];
@@ -60,7 +61,7 @@ const calcularTicketLinea = (
   return listaLineas;
 };
 
-const calcularTotalTicket = (
+export const calcularTotalTicket = (
   lineasTicket: LineaTicket[]
 ): ResultadoTotalTicket => {
   const resultadosLinea = calcularTicketLinea(lineasTicket);
