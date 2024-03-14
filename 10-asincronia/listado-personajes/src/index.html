@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Asincronía</title>
+  </head>
+  <body>
+    <main class="contenedor">
+      <h1>Modulo 10 - Asincronía</h1>
+      <form class="contenedor-formulario" id="formulario">
+        <div class="grupo-formulario">
+          <input type="text" id="search" name="search" />
+          <button>
+            <a id="botonFiltrar" href="#">Filtrar</a>
+          </button>
+        </div>
+      </form>
+
+      <div id="listado-personajes" class="listado-personajes"></div>
+    </main>
+    <script type="module" src="listar-personajes/listar-personajes.ts"></script>
+  </body>
+</html>
