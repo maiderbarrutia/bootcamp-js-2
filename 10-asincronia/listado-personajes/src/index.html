@@ -9,18 +9,21 @@
     <title>Asincronía</title>
   </head>
   <body>
-    <main class="contenedor">
-      <h1>Modulo 10 - Asincronía</h1>
-      <form class="contenedor-formulario" id="formulario">
-        <div class="grupo-formulario">
-          <input type="text" id="search" name="search" />
-          <button>
-            <a id="botonFiltrar" href="#">Filtrar</a>
-          </button>
-        </div>
-      </form>
-
-      <div id="listado-personajes" class="listado-personajes"></div>
+    <main>
+      <header>
+        <h1>Modulo 10 - Asincronía</h1>
+        <form class="contenedor-formulario" id="formulario">
+          <div class="grupo-formulario">
+            <input type="text" id="search" name="search" />
+            <button>
+              <a id="botonFiltrar" href="#">Filtrar</a>
+            </button>
+          </div>
+        </form>
+      </header>
+      <section>
+        <div id="listado-personajes" class="listado-personajes"></div>
+      </section>
     </main>
     <script type="module" src="listar-personajes/listar-personajes.ts"></script>
   </body>

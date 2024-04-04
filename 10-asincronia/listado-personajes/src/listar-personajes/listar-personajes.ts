@@ -11,31 +11,72 @@ const crearElementoImagen = (
   return imagen;
 };
 
-const crearElementoParrafo = (texto: string): HTMLParagraphElement => {
+const crearParrafoTitulo = (titulo?: string, texto?: string): HTMLElement => {
   const parrafo = document.createElement("p");
-  parrafo.textContent = texto;
+  
+  if (titulo && texto) {
+    parrafo.innerHTML = `<strong>${titulo}:</strong> ${texto}`;
+  } else if (titulo) {
+    const destacado = document.createElement("strong");
+    destacado.textContent = titulo;
+    return destacado;
+  }else if (texto) {
+    parrafo.textContent = texto;
+  } else  {
+    parrafo.textContent = "";
+  }
   return parrafo;
 };
 
+// Función para crear una lista de elementos (ul o ol) con sus elementos hijos (li)
+const crearListaElementos = (elementos: string[], tipoLista: "ul" | "ol", tipoElemento: "li"): HTMLUListElement | HTMLOListElement => {
+  const lista = document.createElement(tipoLista);
+
+  elementos.forEach((elemento) => {
+    const elementoLi = document.createElement(tipoElemento);
+    elementoLi.textContent = elemento;
+    lista.appendChild(elementoLi);
+  });
+
+  return lista;
+};
+
+
+// Función para crear el contenedor de habilidades
+const crearListaHabilidades = (titulo: string, habilidades: string[]): HTMLDivElement => {
+  const habilidadesContainer = document.createElement("div");
+  habilidadesContainer.classList.add("list-container");
+
+  const habilidadesTitulo = crearParrafoTitulo(titulo);
+
+  const habilidadesLista = crearListaElementos(habilidades, "ul", "li");
+
+  habilidadesContainer.appendChild(habilidadesTitulo);
+  habilidadesContainer.appendChild(habilidadesLista);
+
+  return habilidadesContainer;
+};
+
+
+
+// Función para crear el contenedor del personaje
 const crearContenedorPersonajes = (personaje: Personaje): HTMLDivElement => {
   const elementoPersonaje = document.createElement("div");
   elementoPersonaje.classList.add("contenedor");
+
   const imagen = crearElementoImagen(personaje.imagen, personaje.nombre);
   elementoPersonaje.appendChild(imagen);
-  const apodo = crearElementoParrafo(personaje.apodo);
+
+  const apodo = crearParrafoTitulo("Nombre", personaje.apodo);
   elementoPersonaje.appendChild(apodo);
-  const especialidad = crearElementoParrafo(personaje.especialidad);
+
+  const especialidad = crearParrafoTitulo("Especialidad: ", personaje.especialidad);
   elementoPersonaje.appendChild(especialidad);
 
-  const habilidadesLista = document.createElement("ul");
-  personaje.habilidades.forEach((habilidad) => {
-    const habilidadElemento = document.createElement("li");
-    habilidadElemento.textContent = habilidad;
-    habilidadesLista.appendChild(habilidadElemento);
-  });
-  elementoPersonaje.appendChild(habilidadesLista);
+  const listaHabilidades = crearListaHabilidades("Habilidades", personaje.habilidades);
+  elementoPersonaje.appendChild(listaHabilidades);
 
-  const amigo = crearElementoParrafo(personaje.amigo);
+  const amigo = crearParrafoTitulo("Amigo", personaje.amigo);
   elementoPersonaje.appendChild(amigo);
 
   return elementoPersonaje;
@@ -125,19 +166,18 @@ const pintarPersonajesFiltrados = async (): Promise<Personaje[]> => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const formulario = document.querySelector("#formulario") as HTMLFormElement;
+  
   const botonFiltrar = document.getElementById(
     "botonFiltrar"
   ) as HTMLButtonElement;
 
   formulario.addEventListener("submit", async (event) => {
-    event.preventDefault(); // Evitar el envío del formulario
-
-    // Aquí puedes llamar a la función para filtrar los personajes
+    event.preventDefault();
     await pintarPersonajesFiltrados();
   });
 
   botonFiltrar.addEventListener("click", async () => {
-    // Aquí también puedes llamar a la función para filtrar los personajes
     await pintarPersonajesFiltrados();
   });
+
 });
