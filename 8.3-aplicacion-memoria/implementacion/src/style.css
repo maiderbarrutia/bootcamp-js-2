@@ -118,6 +118,7 @@ button:focus-visible {
 .card.flipped {
   animation: flip 0.7s 1;
   background: rgb(221, 185, 255);
+  pointer-events: none;
 }
 .card.flipped img {
   display: inline-block;

@@ -3,12 +3,10 @@ import {
   Tablero,
   EstadoPartida,
   crearColeccionDeCartasInicial,
-  crearTableroInicial,
   infoCartas,
 } from "./modelo";
 import { accionOnClick, ocultarCartasNoParejas } from "./ui";
 
-/*1- En el motor nos va a hacer falta un método para barajar cartas*/
 export const barajarCartas = (cartas: Carta[]): Carta[] => {
   for (let i = cartas.length - 1; i > 0; i--) {
     const j: number = Math.floor(Math.random() * (i + 1));
@@ -17,7 +15,6 @@ export const barajarCartas = (cartas: Carta[]): Carta[] => {
   return cartas;
 };
 
-/* 2- Una carta se puede voltear si no está encontrada y no está ya volteada, o no hay dos cartas ya volteadas */
 export const sePuedeVoltearLaCarta = (
   tablero: Tablero,
   indice: number
@@ -25,9 +22,9 @@ export const sePuedeVoltearLaCarta = (
   const cartaElegida = tablero.cartas[indice - 1];
 
   return (
-    !cartaElegida.encontrada ||
-    (!cartaElegida.estaVuelta &&
-      tablero.estadoPartida !== "DosCartasLevantadas")
+    !cartaElegida.encontrada &&
+    !cartaElegida.estaVuelta ||
+      tablero.estadoPartida !== "DosCartasLevantadas"
   );
 };
 
@@ -40,8 +37,10 @@ export const voltearLaCarta = (tablero: Tablero, indice: number): void => {
   } else if (tablero.estadoPartida === "UnaCartaLevantada") {
     tablero.estadoPartida = "DosCartasLevantadas";
     tablero.indiceCartaVolteadaB = indice - 1;
+
     const indiceA = tablero.indiceCartaVolteadaA;
     const indiceB = tablero.indiceCartaVolteadaB;
+    
     if (
       indiceA !== null &&
       indiceA !== undefined &&
@@ -69,8 +68,8 @@ const comprobacionPareja = (
     const cartaB = tablero.cartas[indiceCartaVolteadaB].idFoto;
 
     if (sonPareja(tablero, cartaA, cartaB)) {
-      console.log("son pareja", cartaA, cartaB);
       parejaEncontrada(tablero, cartaA, cartaB);
+      tablero.estadoPartida = "CeroCartasLevantadas";
     } else {
       parejaNoEncontrada(tablero, indiceCartaVolteadaA, indiceCartaVolteadaB);
       tablero.estadoPartida = "CeroCartasLevantadas";
@@ -83,9 +82,9 @@ export const sonPareja = (
   indiceA: number,
   indiceB: number
 ): boolean => {
-  return tablero.cartas[indiceA] === tablero.cartas[indiceB];
+  return tablero.cartas[indiceA].idFoto === tablero.cartas[indiceB].idFoto;
 };
-// /* 4- Aquí asumimos ya que son pareja, lo que hacemos es marcarlas como encontradas y comprobar si la partida esta completa. */
+
 const parejaEncontrada = (
   tablero: Tablero,
   indiceA: number,
@@ -94,26 +93,23 @@ const parejaEncontrada = (
   tablero.cartas[indiceA].encontrada = true;
   tablero.cartas[indiceB].encontrada = true;
   estadoPartida(tablero, "DosCartasLevantadas");
-  console.log("encontrada");
   if (esPartidaCompleta(tablero)) {
     console.log("juego terminado");
   }
 };
-// /* 5- Aquí asumimos que no son pareja y las volvemos a poner boca abajo */
+
 const parejaNoEncontrada = (
   tablero: Tablero,
   indiceA: number,
   indiceB: number
 ): void => {
-  // console.log("no encontrada", indiceA, indiceB);
 
   tablero.cartas[indiceA].encontrada = false;
   tablero.cartas[indiceB].encontrada = false;
   estadoPartida(tablero, "CeroCartasLevantadas");
-  // setTimeout(() => {
-  //   ocultarCartasNoParejas(tablero, indiceA, indiceB);
-  // }, 1000);
-  console.log(tablero.cartas);
+  setTimeout(() => {
+    ocultarCartasNoParejas(tablero, indiceA, indiceB);
+  }, 1000);
   comprobarSiEstanFijas(tablero, indiceA, indiceB);
 };
 const comprobarSiEstanFijas = (
@@ -121,19 +117,16 @@ const comprobarSiEstanFijas = (
   indiceA: number,
   indiceB: number
 ) => {
-  //Si no están encontradas hacemos
   if (
     !tablero.cartas[indiceA].encontrada &&
     !tablero.cartas[indiceB].encontrada
   ) {
     setTimeout(() => {
       ocultarCartasNoParejas(tablero, indiceA, indiceB);
-      // tablero.cartas[indiceA].estaVuelta = false;
-      // tablero.cartas[indiceB].estaVuelta = false;
-    }, 1000);
+    }, 700);
   }
 };
-// /* 6- Esto lo podemos comprobar o bien utilizando every, o bien utilizando un contador (cartasEncontradas) */
+
 const esPartidaCompleta = (tablero: Tablero): boolean => {
   return tablero.cartas.every((carta: Carta) => carta.encontrada === true);
 };
@@ -144,7 +137,7 @@ export const iniciaPartida = (tablero: Tablero): void => {
   accionOnClick(tablero);
 
   crearColeccionDeCartasInicial(infoCartas);
-  crearTableroInicial();
+  tablero
 };
 
 export function estadoPartida(

@@ -1,4 +1,4 @@
-# Laboratoria Aplicación memoria
+# Laboratorio Aplicación memoria
 
 Queremos implementar el clásico juego de las parejas ¿En que consiste esto?
 

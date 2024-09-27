@@ -1,9 +1,11 @@
 import { tablero } from "./modelo";
 import { iniciaPartida } from "./motor";
-import { reiniciarPartida } from "./ui";
+import { reiniciarPartida} from "./ui";
 
 document.addEventListener("DOMContentLoaded", function () {
-  iniciaPartida(tablero);
+  if (tablero && tablero.cartas && tablero.cartas.length !== 0) {
+    iniciaPartida(tablero);
+  }
 });
 
 const iniciaPartidaBtn = document.getElementById("restartButton");

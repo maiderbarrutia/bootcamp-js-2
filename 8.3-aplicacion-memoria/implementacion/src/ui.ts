@@ -1,25 +1,11 @@
-import { Tablero, crearTableroInicial } from "./modelo";
+import { Tablero} from "./modelo";
 import {
   estadoPartida,
   barajarCartas,
   sePuedeVoltearLaCarta,
-  voltearLaCarta,
+  voltearLaCarta
 } from "./motor";
 
-//UI.ts
-//1- Crear el tablero inicial y barajar cartas
-
-export const reiniciarPartida = (tablero: Tablero): void => {
-  const imagenes = document.querySelectorAll(".card img");
-  imagenes.forEach((imagen) => {
-    ocultarCartas(imagen);
-  });
-  estadoPartida(tablero, "CeroCartasLevantadas");
-  crearTableroInicial();
-  barajarCartas(tablero.cartas);
-};
-
-//2- Escuchando al evento click de cada carta (cuando el usuario pinche en una leeremos de data-indice-array, la posición del array de la carta)
 export const accionOnClick = (tablero: Tablero): void => {
   const cartas = document.querySelectorAll(".card");
 
@@ -27,12 +13,8 @@ export const accionOnClick = (tablero: Tablero): void => {
     if (carta instanceof HTMLDivElement) {
       carta.addEventListener("click", () => {
         const cartaId: number = parseInt(carta.id);
-        //Miramos si la carta es volteable (ver motor).
         if (sePuedeVoltearLaCarta(tablero, cartaId)) {
-          /*Si es volteable la voltearemos (cambiamos el src de la imagen), para la imagen sería recomendable crear data-indice-imagen, 
-          va a coincidir con el índice del div para pintar la imagen correspondiente al índice del array de cartas.*/
           voltearLaCarta(tablero, cartaId);
-          //Pintamos la carta clickada
           pintarCarta(tablero, cartaId);
         }
       });
@@ -53,6 +35,7 @@ export const addImageSrc = (tablero: Tablero, indice: number): void => {
     imagenCartaElegida.src = cartaElegida.imagen;
   }
 };
+
 export const removeImageSrc = (indice: number): void => {
   const imagenCartaElegida = document.querySelector(
     `img[data-indice-imagen = "${indice}"]`
@@ -62,12 +45,14 @@ export const removeImageSrc = (indice: number): void => {
     imagenCartaElegida.src = "";
   }
 };
+
 export const flipCard = (indice: number): void => {
   const imagenCartaElegida = document.querySelector(
     `img[data-indice-imagen = "${indice}"]`
   );
   imagenCartaElegida?.parentElement?.classList.add("flipped");
 };
+
 export const removeFlippedCard = (indice: number): void => {
   const imagenCartaElegida = document.querySelector(
     `img[data-indice-imagen = "${indice}"]`
@@ -75,17 +60,9 @@ export const removeFlippedCard = (indice: number): void => {
   imagenCartaElegida?.parentElement?.classList.remove("flipped");
 };
 
-export const ocultarCartas = (imagen: Element): void => {
-  if (
-    imagen !== null &&
-    imagen !== undefined &&
-    imagen instanceof HTMLImageElement
-  ) {
-    imagen.src = "";
-    const imagenId = parseInt(imagen.id);
-    removeFlippedCard(imagenId);
-    removeImageSrc(imagenId);
-  }
+const ocultarCartas = (index: number): void => {
+    removeFlippedCard(index + 1);
+    removeImageSrc(index + 1);
 };
 
 export const ocultarCartasNoParejas = (
@@ -93,11 +70,11 @@ export const ocultarCartasNoParejas = (
   indiceA: number,
   indiceB: number
 ): void => {
-  console.log("ocultar parejas", tablero, indiceA, indiceB);
-  removeFlippedCard(indiceA + 1);
-  removeImageSrc(indiceA + 1);
-  removeFlippedCard(indiceB + 1);
-  removeImageSrc(indiceB + 1);
+  tablero.cartas[indiceA].estaVuelta = false;
+  tablero.cartas[indiceB].estaVuelta = false;
+  
+  ocultarCartas(indiceA)
+  ocultarCartas(indiceB)
 };
 
 export const pintarCarta = (tablero: Tablero, indice: number) => {
@@ -108,4 +85,15 @@ export const pintarCarta = (tablero: Tablero, indice: number) => {
     addImageSrc(tablero, indice);
     flipCard(indice);
   }
+};
+
+export const reiniciarPartida = (tablero: Tablero): void => {
+  const imagenes = document.querySelectorAll(".card img");
+  for (let index = 0; index < imagenes.length; index++) {
+    ocultarCartas(index)
+  };
+  estadoPartida(tablero, "CeroCartasLevantadas");
+  tablero
+  barajarCartas(tablero.cartas);
+
 };
