@@ -8,7 +8,7 @@ import {
   TicketFinal,
 } from "./modelo";
 
-//Calcular precio total de cada producto multiplicando por la cantidad
+
 export const calcularPrecioTotal = (
   linea: LineaTicket,
   precio: number
@@ -18,17 +18,16 @@ export const calcularPrecioTotal = (
 };
 
 export const calculaPrecioSinIva = (
-  precioInicial: number,
+  precioConIva: number,
   porcentajeIva: number
 ): number => {
-  const precio = parseFloat(precioInicial.toFixed(2));
-  const iva: number = (precio * porcentajeIva) / 100;
-  const precioSinIva: number = parseFloat((precio - iva).toFixed(2));
-
+  const precio = parseFloat(precioConIva.toFixed(2));
+  const precioSinIva: number = parseFloat(
+    (precio / (1 + porcentajeIva / 100)).toFixed(2)
+  );
   return precioSinIva;
 };
 
-//Por cada producto queremos el nombre, la cantidad, el precio sin IVA, el tipo de IVA y el precio con IVA.
 export const calcularTicketLinea = (
   lineasTicket: LineaTicket[]
 ): ResultadoLineaTicket[] => {
