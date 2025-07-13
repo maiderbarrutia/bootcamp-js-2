@@ -3,9 +3,7 @@ import { validate } from "./ui";
 //AGRUPAR BOTONES
 function buttons(button: HTMLElement | null, handler: () => void): void {
   if (
-    button instanceof HTMLButtonElement &&
-    button !== undefined &&
-    button !== null
+    button instanceof HTMLButtonElement
   ) {
     button.addEventListener("click", handler);
   }
@@ -13,7 +11,7 @@ function buttons(button: HTMLElement | null, handler: () => void): void {
 
 //HABILITAR BOTONES
 const disableButton = (id: string, enabled: boolean): void => {
-  const button = document.getElementById(id) as HTMLButtonElement | null; // Aseguramos que button sea de tipo HTMLButtonElement | null
+  const button = document.getElementById(id) as HTMLButtonElement | null;
   if (button) {
     button.disabled = enabled;
   } else {
@@ -46,5 +44,4 @@ function loadActions(): void {
   buttons(validateButton, validate);
 }
 
-//CARGAR PARTIDA
 document.addEventListener("DOMContentLoaded", loadActions);

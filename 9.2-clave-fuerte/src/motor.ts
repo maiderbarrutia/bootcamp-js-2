@@ -31,26 +31,25 @@ export const tieneNumeros = (clave: string): ValidacionClave => {
 
 //3- La clave debe de tener caracteres especiales (@,#,+, _, ...)
 export const tieneCaracteresEspeciales = (clave: string): ValidacionClave => {
-  const caracteresEspeciales = ["@", "#", "+", "_", "&"];
-  const contieneCaracteresEspeciales = caracteresEspeciales.some((caracter) =>
-    clave.includes(caracter)
-  );
-  if (!contieneCaracteresEspeciales) {
+  const caracteresEspeciales = /[^a-zA-Z0-9]/;
+
+  if (caracteresEspeciales.test(clave)) {
+    return { esValida: true };
+  } else {
     return {
       esValida: false,
-      error: "La clave no tiene carácteres especiales",
+      error: "La clave debe contener al menos un carácter especial",
     };
-  } else {
-    return { esValida: true };
   }
 };
+
 
 //4- La clave debe de tener una longitud mínima de 8 caracteres.
 export const tieneLongitudMinima = (clave: string): ValidacionClave => {
   if (clave.length < 8) {
     return {
       esValida: false,
-      error: "La clave no tiene el nombre del usuario",
+      error: "La clave debe tener al menos 8 caracteres",
     };
   } else {
     return { esValida: true };
@@ -95,34 +94,6 @@ export const tienePalabrasComunes = (
   }
 };
 
-// export const validarClave = (
-//   nombreUsuario: string,
-//   clave: string,
-//   commonPasswords: string[]
-// ): ValidacionClave => {
-//   const validaciones: ValidacionClave[] = [
-//     tieneMayusculasYMinusculas(clave),
-//     tieneNumeros(clave),
-//     tieneCaracteresEspeciales(clave),
-//     tieneLongitudMinima(clave),
-//     tieneNombreUsuario(nombreUsuario, clave),
-//     tienePalabrasComunes(clave, commonPasswords),
-//   ];
-
-//   // Buscar si hay alguna validación que no sea válida
-//   const fallaLaValidacion = validaciones.find(
-//     (validacion) => validacion.esValida === false
-//   );
-
-//   // Si alguna validación falla, devolvemos el error
-//   if (fallaLaValidacion) {
-//     return fallaLaValidacion;
-//   } else {
-//     // Si todas las validaciones son válidas, devolvemos true
-//     return { esValida: true };
-//   }
-// };
-
 export const validarClave = (
   nombreUsuario: string,
   clave: string,
@@ -139,7 +110,6 @@ export const validarClave = (
 
   const errores: ValidacionClave[] = [];
 
-  // Recorrer todas las validaciones
   validaciones.forEach((validacion) => {
     if (!validacion.esValida) {
       errores.push(validacion);

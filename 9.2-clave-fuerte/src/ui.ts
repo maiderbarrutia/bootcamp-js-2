@@ -1,30 +1,45 @@
 import { validarClave } from "./motor";
 import { commonPasswords, ValidacionClave } from "./modelo";
 
-const showMessage = (message: string, isError: boolean): void => {
+export const showMessage = (message: string, isError: boolean): void => {
   const messageDiv = document.getElementById("message");
   if (messageDiv instanceof HTMLDivElement) {
     messageDiv.textContent = message;
-    messageDiv.style.color = isError ? "red" : "green";
+    messageDiv.classList.remove("error", "success");
+    messageDiv.classList.add(isError ? "error" : "success");
   } else {
-    console.error("No se encontró el elemento con id 'message' o no es un div");
+    console.error("No se encontró el elemento con id 'message'");
   }
 };
 
-const showErrorList = (resultadoValidacion: ValidacionClave[]): void => {
-  const errores = resultadoValidacion.map((error) =>
-    error.error?.toLowerCase()
-  );
-  let errorMessage =
-    "Incorrecto! La clave no cumple con los siguientes requisitos: ";
-  if (errores.length > 1) {
-    // errores.slice(0, -1) obtiene todos los errores menos el ultimo y con el join añade comas. Con " y " + errores.slice(-1); agrega "y" antes del último error
-    errorMessage += errores.slice(0, -1).join(", ") + " y " + errores.slice(-1);
-  } else {
-    //Añade solo el primer error
-    errorMessage += errores[0];
+export const showErrorList = (resultadoValidacion: ValidacionClave[]): void => {
+  const messageDiv = document.getElementById("message");
+
+  if (!(messageDiv instanceof HTMLDivElement)) {
+    console.error("No se encontró el elemento con id 'message'");
+    return;
   }
-  showMessage(errorMessage, true); //La lista de errores se muestra mediante el mensaje en html
+
+  messageDiv.innerHTML = "";
+
+  messageDiv.classList.remove("success");
+  messageDiv.classList.add("error");
+
+  const titulo = document.createElement("p");
+  titulo.textContent = "La clave no cumple con los siguientes requisitos:";
+  messageDiv.appendChild(titulo);
+
+  const listaErrores = document.createElement("ul");
+
+  resultadoValidacion.forEach((error) => {
+    if (error.error) {
+      const li = document.createElement("li");
+      li.textContent = error.error;
+      listaErrores.appendChild(li);
+    }
+  });
+
+  messageDiv.appendChild(listaErrores);
 };
 
 export const validate = (): void => {
@@ -36,7 +51,6 @@ export const validate = (): void => {
     commonPasswords
   );
   if (resultadoValidacion.length > 0) {
-    // Mostrar lista continua de errores
     showErrorList(resultadoValidacion);
   } else {
     showMessage("La clave es válida!", false);
