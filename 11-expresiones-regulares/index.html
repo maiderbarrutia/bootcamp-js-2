@@ -5,16 +5,28 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Expresiones regulares</title>
+    <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
     <div id="app">
-      <h1>Laboratorio expresiones regulares: Validación y extracción de información de IBAN</h1>
-    <form id="ibanForm">
-        <label for="ibanInput">Introduce el IBAN:</label>
-        <input type="text" id="ibanInput" name="iban" required>
-        <button type="submit">Buscar</button>
-    </form>
-    <div id="ibanInfo"></div>
+      <h1>Laboratorio expresiones regulares</h1>
+      <section>
+        <h2>Validación y extracción de información de IBAN</h2>
+        <form id="ibanForm">
+            <label for="ibanInput">Introduce el IBAN:</label>
+            <input type="text" id="ibanInput" name="iban" required>
+            <button type="submit">Buscar</button>
+        </form>
+        <div id="ibanInfo"></div>
+      </section>
+
+      <section>
+        <h2>Extractor de imágenes</h2>
+        <textarea id="htmlInput" rows="10" cols="80" placeholder="Pega aquí HTML con imágenes..."></textarea>
+        <br />
+        <button id="extractBtn">Extraer enlaces a imágenes</button>
+        <div id="imageResults"></div>
+      </section>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
