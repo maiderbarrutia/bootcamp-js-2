@@ -2,17 +2,7 @@ import { reservas } from "./modelo";
 import { CalculadoraReservas } from "./motor";
 
 document.addEventListener("DOMContentLoaded", function () {
-  //   const calculadoraParticular = new CalculadoraReservas(reservas);
-  //   console.log(
-  //     "Subtotal para cliente particular:",
-  //     calculadoraParticular.subtotal.toFixed(2),
-  //     "€"
-  //   );
-  //   console.log(
-  //     "Total para cliente particular:",
-  //     calculadoraParticular.total.toFixed(2),
-  //     "€"
-  //   );
+
   let idCounter = 1;
   for (const reserva of reservas) {
     const calculadoraParticular = new CalculadoraReservas([reserva]);
@@ -39,8 +29,23 @@ document.addEventListener("DOMContentLoaded", function () {
         " para " +
         [reserva.pax] +
         " personas:" +
-        calculadoraParticular.subtotal.toFixed(2),
+        calculadoraParticular.total.toFixed(2),
       "€"
     );
   }
+
+  console.log(
+      "------------------ SUMA RESERVAS ------------------"
+    );
+    const calculadoraParticular = new CalculadoraReservas(reservas);
+    console.log(
+      "Subtotal reservas cliente particular:",
+      calculadoraParticular.subtotal.toFixed(2),
+      "€"
+    );
+    console.log(
+      "Total reservas cliente particular:",
+      calculadoraParticular.total.toFixed(2),
+      "€"
+    );
 });

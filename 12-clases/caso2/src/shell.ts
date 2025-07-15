@@ -5,9 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let idCounter = 1;
   for (const reserva of reservas) {
     const calculadoraParticular = new CalculadoraReservas([reserva]);
-    const calculadoraTourOperador = new CalculadoraReservasTourOperador([
-      reserva,
-    ]);
+    const calculadoraTourOperador = new CalculadoraReservasTourOperador([reserva]);
     let reservaId = idCounter++;
     console.log(
       "------------------ RESERVA NÚMERO " + reservaId + " ------------------"
