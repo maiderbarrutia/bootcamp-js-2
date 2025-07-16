@@ -1,45 +1,21 @@
 import React from "react";
 import { Account } from "../../models/account";
+import styles from "./BalanceHeader.module.css";
 
-interface Props {
-  account: Account;
-}
-
-export const BalanceHeader: React.FC<Props> = ({ account }) => (
-  <header style={{ background: "#fff", padding: "32px" }}>
-    <div style={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "baseline",
-      marginBottom: "0.5rem",
-    }}>
-      <h1 style={{ fontSize: "2.1rem", margin: 0, fontWeight: 500 }}>Saldos y Últimos movimientos</h1>
-      <div>
-        <div style={{
-          textAlign: "right",
-          fontWeight: "bold",
-          fontSize: "1.1rem"
-        }}>SALDO DISPONIBLE</div>
-        <div style={{
-          color: "#00ad74",
-          fontWeight: 700,
-          fontSize: "2rem"
-        }}>
-          {account.balance.toLocaleString("es-ES")} €
+export const BalanceHeader: React.FC<{ account: Account }> = ({ account }) => (
+  <header className={styles["balance-header"]}>
+    <div className={styles["balance-header__top"]}>
+      <h1 className={styles["balance-header__title"]}>Saldos y Últimos movimientos</h1>
+      <div className={styles["balance-header__balance-block"]}>
+        <div className={styles["balance-header__balance-label"]}>Saldo disponible</div>
+        <div className={styles["balance-header__balance-amount"]}>
+          {account.balance} €
         </div>
       </div>
     </div>
-    <div style={{
-      display: "flex",
-      justifyContent: "space-between",
-      borderBottom: "4px solid #000",
-      alignItems: "center",
-      paddingBottom: "10px"
-    }}>
-      <span><strong>Alias:</strong> {account.alias}</span>
-      <span style={{ fontWeight: "bold" }}>
-        IBAN: {account.iban}
-      </span>
+    <div className={styles["balance-header__bottom"]}>
+      <span className={styles["balance-header__alias"]}>Alias: {account.alias}</span>
+      <span className={styles["balance-header__iban"]}>Iban: {account.iban}</span>
     </div>
   </header>
 );
