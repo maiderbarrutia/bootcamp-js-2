@@ -22,9 +22,9 @@ export const sePuedeVoltearLaCarta = (
   const cartaElegida = tablero.cartas[indice - 1];
 
   return (
+    tablero.estadoPartida !== "DosCartasLevantadas" &&
     !cartaElegida.encontrada &&
-    !cartaElegida.estaVuelta ||
-      tablero.estadoPartida !== "DosCartasLevantadas"
+    !cartaElegida.estaVuelta
   );
 };
 
@@ -104,27 +104,12 @@ const parejaNoEncontrada = (
   indiceB: number
 ): void => {
 
-  tablero.cartas[indiceA].encontrada = false;
-  tablero.cartas[indiceB].encontrada = false;
   estadoPartida(tablero, "CeroCartasLevantadas");
   setTimeout(() => {
+    tablero.cartas[indiceA].estaVuelta = false;
+    tablero.cartas[indiceB].estaVuelta = false;
     ocultarCartasNoParejas(tablero, indiceA, indiceB);
   }, 1000);
-  comprobarSiEstanFijas(tablero, indiceA, indiceB);
-};
-const comprobarSiEstanFijas = (
-  tablero: Tablero,
-  indiceA: number,
-  indiceB: number
-) => {
-  if (
-    !tablero.cartas[indiceA].encontrada &&
-    !tablero.cartas[indiceB].encontrada
-  ) {
-    setTimeout(() => {
-      ocultarCartasNoParejas(tablero, indiceA, indiceB);
-    }, 700);
-  }
 };
 
 const esPartidaCompleta = (tablero: Tablero): boolean => {
@@ -132,12 +117,12 @@ const esPartidaCompleta = (tablero: Tablero): boolean => {
 };
 
 export const iniciaPartida = (tablero: Tablero): void => {
-  estadoPartida(tablero, "CeroCartasLevantadas");
-  barajarCartas(tablero.cartas);
-  accionOnClick(tablero);
+  tablero.cartas = barajarCartas(crearColeccionDeCartasInicial(infoCartas));
 
-  crearColeccionDeCartasInicial(infoCartas);
-  tablero
+  accionOnClick(tablero);
+  estadoPartida(tablero, "CeroCartasLevantadas");
+
+
 };
 
 export function estadoPartida(

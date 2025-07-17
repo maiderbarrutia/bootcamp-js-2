@@ -12,10 +12,15 @@ export const accionOnClick = (tablero: Tablero): void => {
   cartas.forEach((carta) => {
     if (carta instanceof HTMLDivElement) {
       carta.addEventListener("click", () => {
+        
         const cartaId: number = parseInt(carta.id);
         if (sePuedeVoltearLaCarta(tablero, cartaId)) {
-          voltearLaCarta(tablero, cartaId);
           pintarCarta(tablero, cartaId);
+
+          setTimeout(() => {
+            voltearLaCarta(tablero, cartaId);
+          }, 250);
+
         }
       });
     }
@@ -78,22 +83,21 @@ export const ocultarCartasNoParejas = (
 };
 
 export const pintarCarta = (tablero: Tablero, indice: number) => {
-  if (
-    tablero.cartas[indice - 1].estaVuelta === true ||
-    tablero.cartas[indice - 1].encontrada === true
-  ) {
     addImageSrc(tablero, indice);
     flipCard(indice);
-  }
 };
 
 export const reiniciarPartida = (tablero: Tablero): void => {
   const imagenes = document.querySelectorAll(".card img");
-  for (let index = 0; index < imagenes.length; index++) {
-    ocultarCartas(index)
+  for (let i = 0; i < imagenes.length; i++) {
+    ocultarCartas(i)
   };
-  estadoPartida(tablero, "CeroCartasLevantadas");
-  tablero
-  barajarCartas(tablero.cartas);
 
+  tablero.cartas.forEach((carta) => {
+    carta.estaVuelta = false;
+    carta.encontrada = false;
+  });
+
+  estadoPartida(tablero, "CeroCartasLevantadas");
+  barajarCartas(tablero.cartas);
 };
