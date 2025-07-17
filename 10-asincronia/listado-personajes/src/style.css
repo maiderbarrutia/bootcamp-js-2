@@ -1,0 +1,148 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+:root {
+  --bg-color: rgb(229, 234, 238);
+  --color-primary: #00ad74;
+  --color-secondary: #008c86;
+  --font-family: Roboto, "Arial", "Helvetica", sans-serif;
+}
+body {
+  min-height: 100vh;
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  background: var(--bg-color);
+  z-index: 10;
+  padding: 32px 0 10px 0;
+  text-align: center;
+}
+
+.contenedor-formulario {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.grupo-formulario {
+  display: flex;
+  gap: 10px;
+  width: 350px;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+  background: #fff;
+}
+
+input[type="text"]:focus {
+  border-color: var(--color-primary);
+}
+
+button {
+  padding: 10px 20px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: var(--color-secondary);
+}
+
+section {
+  max-width: 1100px;
+  width: 100%;
+  margin: auto;
+}
+
+.listado-personajes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 28px;
+  padding: 40px 20px;
+  width: 100%;
+  justify-items: stretch;
+}
+
+.contenedor {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: transform 0.15s, box-shadow 0.15s;
+  min-height: 380px;
+}
+
+.contenedor:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.13);
+}
+
+.contenedor-imagen {
+  width: 100%;
+  height: 230px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 14px;
+  padding: 10px;
+  background: #fff;
+}
+
+.contenedor-imagen img {
+  max-height: 100%;
+  max-width: 100%;
+  height: auto;
+  width: auto;
+  display: block;
+}
+
+.contenedor p {
+  font-size: 1rem;
+  line-height: 1.35;
+  margin: 5px 0;
+}
+
+.contenedor strong {
+  font-weight: bold;
+}
+
+@media (max-width: 900px) {
+  .listado-personajes {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+  .grupo-formulario {
+    width: 95%;
+  }
+}
