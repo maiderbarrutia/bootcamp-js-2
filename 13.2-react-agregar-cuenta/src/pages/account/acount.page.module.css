@@ -1,0 +1,13 @@
+.container{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.title{
+    font-size: 30px;
+    font-weight: 200;
+    border-bottom: 5px solid var(--secondary_color);
+    padding-bottom: 5px;
+    margin-bottom: 50px;
+}

@@ -1,0 +1,21 @@
+.container {
+  width: 100%;
+  background: #fff;
+  margin-top: 2rem;
+  overflow: hidden;
+  font-size: 0.95rem;
+  padding: 10px;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  font-weight: 600;
+  text-transform: uppercase;
+  gap: 2px;
+}
+
+.column {
+  background-color: #ccc;
+  padding: 15px;
+}
