@@ -1,16 +1,6 @@
 import * as apiModel from "./api/movement-list.api-model";
 import * as viewModel from "./movement-list.vm";
 
-// export const mapAccountFromApiToVm = (
-//   account: apiModel.Account
-// ): viewModel.AccountVm => ({
-//   id: account.id,
-//   iban: account.iban,
-//   name: account.name,
-//   alias: account.alias,
-//   balance: account.balance,
-// });
-
 export const mapAccountFromApiToVm = (
   account: apiModel.Account
 ): viewModel.AccountVm => ({
