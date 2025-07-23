@@ -3,32 +3,57 @@ import {
   estadoPartida,
   barajarCartas,
   sePuedeVoltearLaCarta,
-  voltearLaCarta
+  voltearLaCarta,
+  sonPareja,
+  parejaEncontrada,
+  esPartidaCompleta,
+  parejaNoEncontrada
 } from "./motor";
 
 export const accionOnClick = (tablero: Tablero): void => {
   const cartas = document.querySelectorAll(".card");
+  cartas.forEach((carta, index) => {
 
-  cartas.forEach((carta) => {
     if (carta instanceof HTMLDivElement) {
       carta.addEventListener("click", () => {
-        
-        const cartaId: number = parseInt(carta.id);
-        if (sePuedeVoltearLaCarta(tablero, cartaId)) {
-          pintarCarta(tablero, cartaId);
-
-          setTimeout(() => {
-            voltearLaCarta(tablero, cartaId);
-          }, 250);
-
-        }
+        manejadorDeEventoClick(tablero, index);
       });
     }
   });
 };
 
+const manejadorDeEventoClick = (tablero: Tablero, index: number) => {
+
+  if (sePuedeVoltearLaCarta(tablero, index)) {
+    voltearLaCarta(tablero, index);
+    pintarCarta(tablero, index);
+    verificarSiEsLaSegundaCarta(tablero);
+  } else {
+    console.log('A esta carta no se le puede dar la vuelta.');
+  }
+}
+
+const verificarSiEsLaSegundaCarta = (tablero: Tablero) => {
+  const indiceCartaA = tablero.indiceCartaVolteadaA;
+  const indiceCartaB = tablero.indiceCartaVolteadaB;
+
+  if (indiceCartaA !== undefined && indiceCartaB !== undefined) {
+    if (sonPareja(tablero, indiceCartaA, indiceCartaB)) {
+      parejaEncontrada(tablero, indiceCartaA, indiceCartaB);
+      if (esPartidaCompleta(tablero)) {
+        partidaTerminada();
+      }
+    } else {
+      parejaNoEncontrada(tablero, indiceCartaA, indiceCartaB);
+      setTimeout(() => {
+        ocultarCartasNoParejas(tablero, indiceCartaA, indiceCartaB);
+      }, 1000);
+    }
+  }
+}
+
 export const addImageSrc = (tablero: Tablero, indice: number): void => {
-  const cartaElegida = tablero.cartas[indice - 1];
+  const cartaElegida = tablero.cartas[indice];
   const imagenCartaElegida = document.querySelector(
     `img[data-indice-imagen = "${indice}"]`
   );
@@ -66,8 +91,8 @@ export const removeFlippedCard = (indice: number): void => {
 };
 
 const ocultarCartas = (index: number): void => {
-    removeFlippedCard(index + 1);
-    removeImageSrc(index + 1);
+    removeFlippedCard(index);
+    removeImageSrc(index);
 };
 
 export const ocultarCartasNoParejas = (
@@ -87,6 +112,41 @@ export const pintarCarta = (tablero: Tablero, indice: number) => {
     flipCard(indice);
 };
 
+const mostrarMensajeFinal = () => {
+  const cardsSection = document.querySelector(".cards");
+  const overlay = document.createElement("div");
+  
+  overlay.id = "cardsOverlay";
+  overlay.classList.add("overlay");
+  overlay.textContent = "Has ganado la partida!";
+
+  if (
+    cardsSection !== null &&
+    cardsSection !== undefined &&
+    cardsSection instanceof HTMLElement
+  ) {
+    cardsSection.style.position = "relative";
+    cardsSection.appendChild(overlay);
+  }
+  
+}
+
+const quitarMensajeFinal = () => {
+  const overlay = document.getElementById("cardsOverlay");
+  if (
+    overlay !== null &&
+    overlay !== undefined &&
+    overlay instanceof HTMLElement
+  ) {
+    overlay.remove();
+  }
+}
+
+const partidaTerminada =() =>{
+  console.log('la partida está completada');
+  mostrarMensajeFinal();
+}
+
 export const reiniciarPartida = (tablero: Tablero): void => {
   const imagenes = document.querySelectorAll(".card img");
   for (let i = 0; i < imagenes.length; i++) {
@@ -100,4 +160,5 @@ export const reiniciarPartida = (tablero: Tablero): void => {
 
   estadoPartida(tablero, "CeroCartasLevantadas");
   barajarCartas(tablero.cartas);
+  quitarMensajeFinal();
 };
